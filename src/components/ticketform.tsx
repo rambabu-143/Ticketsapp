@@ -3,9 +3,18 @@
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
 import { ticketSchema } from "../../ValidationSchemas/ticket";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./ui/input";
+import SimpleMdeReact from "react-simplemde-editor";
+import "easymde/dist/easymde.min.css";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 type Tickeformdata = z.infer<typeof ticketSchema>;
 
@@ -18,9 +27,12 @@ const Ticketform = () => {
     console.log(values);
   }
   return (
-    <div>
+    <div className="rounded-md border w-full p-4">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          className=" w-full space-y-6"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
           <FormField
             control={form.control}
             name="title"
@@ -33,6 +45,65 @@ const Ticketform = () => {
               </FormItem>
             )}
           />
+          <Controller
+            name="description"
+            control={form.control}
+            render={({ field }) => (
+              <SimpleMdeReact placeholder="Description" {...field} />
+            )}
+          />
+
+          <div className="flex w-full space-x-4">
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Status..."></SelectValue>
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="OPEN">Open</SelectItem>
+                      <SelectItem value="STARTED">Started</SelectItem>
+                      <SelectItem value="CLOSE">Close</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            ></FormField>
+            <FormField
+              control={form.control}
+              name="priority"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Priority</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Priority..."></SelectValue>
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="LOW">Low</SelectItem>
+                      <SelectItem value="MEDIUM">Medium</SelectItem>
+                      <SelectItem value="HIGH">High</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            ></FormField>
+            
+          </div>
         </form>
       </Form>
     </div>

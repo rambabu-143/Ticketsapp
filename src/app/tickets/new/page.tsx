@@ -1,9 +1,11 @@
-import Ticketform from "@/components/ticketform";
+import dynamic from "next/dynamic";
 import React from "react";
-
+const Ticketform = dynamic(() => import("@/components/ticketform"), {
+  ssr: false,
+});
 const NewTicket = () => {
   return (
-    <div>
+    <div className="p-4">
       <Ticketform />
     </div>
   );
