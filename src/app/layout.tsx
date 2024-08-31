@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Mainnav from "@/components/mainnav";
+import { ThemeProvider } from "@/components/themeprovider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +18,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <nav className="flex flex-col items-center border-b">
+            <div className="max-w-6xl w-full">
+              <Mainnav />
+            </div>
+          </nav>
+          <main className="flex flex-col items-center ">
+            <div className="max-w-6xl w-full">{children}</div>
+          </main>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
