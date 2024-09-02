@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Ticket } from "@prisma/client";
+import Link from "next/link";
 
 interface Dataprops {
   tickets: Ticket[];
@@ -36,7 +37,11 @@ const Datatable = ({ tickets }: Dataprops) => {
           <TableBody>
             {tickets.map((ticket) => (
               <TableRow key={ticket.id}>
-                <TableCell>{ticket.title}</TableCell>
+                <TableCell>
+                  <Link href={`/tickets/edit/${ticket.id}`}>
+                    {ticket.title}
+                  </Link>
+                </TableCell>
                 <TableCell>
                   <div className="flex justify-center">
                     <Ticketsstatusbatch status={ticket.status} />
