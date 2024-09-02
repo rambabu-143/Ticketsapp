@@ -21,6 +21,29 @@ export async function PATCH(request: NextRequest, { params }: Props) {
   if (!ticket) {
     return NextResponse.json({ error: "Ticket not found" }, { status: 404 });
   }
-  const updateTicket = await prisma.ticket.update({where:{id:ticket.id},data:{...body}})
-  return NextResponse.json(updateTicket)
+
+  const updatedTicket = await prisma.ticket.update({
+    where: { id: ticket.id },
+    data: { ...body },
+  });
+
+  return NextResponse.json(updatedTicket);
+}
+
+export async function DELETE(request: NextRequest, { params }: Props) {
+  const ticketId = parseInt(params.id);
+
+  const ticket = await prisma.ticket.findUnique({
+    where: { id: ticketId },
+  });
+
+  if (!ticket) {
+    return NextResponse.json({ error: "Ticket not found" }, { status: 404 });
+  }
+
+  await prisma.ticket.delete({
+    where: { id: ticketId },
+  });
+
+  return NextResponse.json({ message: "Ticket deleted successfully" });
 }

@@ -38,7 +38,7 @@ const Datatable = ({ tickets }: Dataprops) => {
             {tickets.map((ticket) => (
               <TableRow key={ticket.id}>
                 <TableCell>
-                  <Link href={`/tickets/edit/${ticket.id}`}>
+                  <Link href={`/tickets/${ticket.id}`}>
                     {ticket.title}
                   </Link>
                 </TableCell>
