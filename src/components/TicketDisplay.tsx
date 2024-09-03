@@ -1,14 +1,16 @@
 // components/TicketDisplay.tsx
 import React from "react";
-import { Ticket } from "@prisma/client";
+import { Ticket, User } from "@prisma/client";
 import Link from "next/link";
 import DeleteButton from "./DeleteButton";
+import AssignTicket from "./assignticket";
 
 interface TicketDisplayProps {
   ticket: Ticket;
+  users: User[];
 }
 
-const TicketDisplay: React.FC<TicketDisplayProps> = ({ ticket }) => {
+const TicketDisplay: React.FC<TicketDisplayProps> = ({ ticket, users }) => {
   return (
     <div className="border rounded-md p-6 shadow-md">
       <h1 className="text-2xl font-bold mb-4">{ticket.title}</h1>
@@ -31,7 +33,8 @@ const TicketDisplay: React.FC<TicketDisplayProps> = ({ ticket }) => {
           minute: "2-digit",
         })}
       </div>
-      <div className="flex justify-start mt-3 items-center gap-5">
+      <div className="flex justify-start mt-3 w-1/2 items-center gap-5">
+        <AssignTicket ticket={ticket} user={users} />
         <Link href={`/tickets/edit/${ticket.id}`}>
           <p className="text-blue-500 hover:underline">Edit</p>
         </Link>

@@ -1,8 +1,11 @@
 import Link from "next/link";
 import React from "react";
 import Tooglemode from "./tooglemode";
+import { getServerSession } from "next-auth";
+import options from "@/app/api/auth/[...nextauth]/options";
 
-const Mainnav = () => {
+const Mainnav = async () => {
+  const session = await getServerSession(options);
   return (
     <div className="flex justify-between w-full p-4">
       <div className="flex justify-center  gap-6 items-center ">
@@ -12,8 +15,13 @@ const Mainnav = () => {
       </div>
 
       <div className=" flex  gap-6">
-        <Link href="/">Logout</Link>
-        <Tooglemode/>
+        {session ? (
+          <Link href="/api/auth/signout?callbackUrl=/">Logout</Link>
+        ) : (
+          <Link href="/api/auth/signin">Login</Link>
+        )}
+
+        <Tooglemode />
       </div>
     </div>
   );

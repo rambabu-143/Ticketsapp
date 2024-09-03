@@ -13,12 +13,13 @@ const TicketPage: NextPage<TicketPageProps> = async ({
   const ticket = await prisma?.ticket.findUnique({
     where: { id: parseInt(params.id) },
   });
+  const users = await prisma.user.findMany()
   if (!ticket) {
     return <p className="text-destructive">Ticket not found!</p>;
   }
   return (
     <div className="container mx-auto p-4">
-      <TicketDisplay ticket={ticket} />
+      <TicketDisplay ticket={ticket} users={users} />
     </div>
   );
 };

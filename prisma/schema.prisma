@@ -12,13 +12,15 @@ datasource db {
 }
 
 model Ticket {
-  id          Int      @id @default(autoincrement())
-  title       String   @db.VarChar(255)
-  description String   @db.Text
-  status      Status   @default(OPEN)
-  priority    Priority @default(MEDIUM)
-  createdAt   DateTime @default(now())
-  UpdatedAt   DateTime @updatedAt
+  id               Int      @id @default(autoincrement())
+  title            String   @db.VarChar(255)
+  description      String   @db.Text
+  status           Status   @default(OPEN)
+  priority         Priority @default(MEDIUM)
+  createdAt        DateTime @default(now())
+  UpdatedAt        DateTime @updatedAt
+  assignedToUserId Int?
+  assignedToUser   User?    @relation(fields: [assignedToUserId], references: [id])
 }
 
 enum Status {
@@ -31,4 +33,19 @@ enum Priority {
   LOW
   MEDIUM
   HIGH
+}
+
+model User {
+  id              Int      @id @default(autoincrement())
+  name            String
+  username        String   @unique
+  password        String
+  role            Role     @default(USER)
+  assignedTickets Ticket[]
+}
+
+enum Role {
+  ADMIN
+  TECH
+  USER
 }
