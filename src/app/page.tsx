@@ -1,4 +1,6 @@
+import DashRecentTickets from "@/components/dashrecent-tickets";
 import prisma from "../../prisma/db";
+import DashChart from "@/components/dashChart";
 
 export default async function Home() {
 
@@ -15,9 +17,28 @@ export default async function Home() {
       assignedToUser:true,
     }
   })
+
+  const groupTicket =await prisma.ticket.groupBy({
+    by:['status'],
+    _count:{
+      id:true
+    }
+  })
+
+  const data = groupTicket.map((item)=>{
+    return{
+      name:item.status,
+      total:item._count.id
+    }
+  })
+  
   return (
     <>
-      <p>Home page</p>
+    <div className="grid gap-4 md:grid-cols-2 p-4">
+      <div><DashRecentTickets tickets = {tickets}/></div>
+      <div><DashChart data={data}/></div>
+
+    </div>
     </>
   );
 }
