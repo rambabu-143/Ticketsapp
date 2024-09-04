@@ -7,45 +7,57 @@ interface Props {
 }
 
 export async function PATCH(request: NextRequest, { params }: Props) {
-  const body = await request.json();
-  const validation = ticketPatchSchema.safeParse(body);
+  try {
+    const body = await request.json();
+    const validation = ticketPatchSchema.safeParse(body);
 
-  if (!validation.success) {
-    return NextResponse.json(validation.error.format(), { status: 400 });
+    if (!validation.success) {
+      return NextResponse.json(validation.error.format(), { status: 400 });
+    }
+
+    const ticketId = parseInt(params.id);
+    const ticket = await prisma.ticket.findUnique({
+      where: { id: ticketId },
+    });
+
+    if (!ticket) {
+      return NextResponse.json({ error: "Ticket not found" }, { status: 404 });
+    }
+
+    const updatedTicket = await prisma.ticket.update({
+      where: { id: ticketId },
+      data: {
+        ...body,
+        assignedToUserId: body.assignedToUserId ? parseInt(body.assignedToUserId) : undefined,
+      },
+    });
+
+    return NextResponse.json(updatedTicket);
+  } catch (error) {
+    console.error("Error in PATCH /api/tickets/[id]:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
-
-  const ticket = await prisma.ticket.findUnique({
-    where: { id: parseInt(params.id) },
-  });
-
-  if (!ticket) {
-    return NextResponse.json({ error: "Ticket not found" }, { status: 404 });
-  }
-  if (body?.assignedToUserId) {
-    body.assignedToUserId = parseInt(body.assignedToUserId);
-  }
-
-  const updatedTicket = await prisma.ticket.update({
-    where: { id: ticket.id },
-    data: { ...body },
-  });
-  return NextResponse.json(updatedTicket);
 }
 
 export async function DELETE(request: NextRequest, { params }: Props) {
-  const ticketId = parseInt(params.id);
+  try {
+    const ticketId = parseInt(params.id);
 
-  const ticket = await prisma.ticket.findUnique({
-    where: { id: ticketId },
-  });
+    const ticket = await prisma.ticket.findUnique({
+      where: { id: ticketId },
+    });
 
-  if (!ticket) {
-    return NextResponse.json({ error: "Ticket not found" }, { status: 404 });
+    if (!ticket) {
+      return NextResponse.json({ error: "Ticket not found" }, { status: 404 });
+    }
+
+    await prisma.ticket.delete({
+      where: { id: ticketId },
+    });
+
+    return NextResponse.json({ message: "Ticket deleted successfully" });
+  } catch (error) {
+    console.error("Error in DELETE /api/tickets/[id]:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
-
-  await prisma.ticket.delete({
-    where: { id: ticketId },
-  });
-
-  return NextResponse.json({ message: "Ticket deleted successfully" });
 }
