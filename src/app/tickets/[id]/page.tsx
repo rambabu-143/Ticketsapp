@@ -1,19 +1,18 @@
 import { GetServerSideProps, NextPage } from "next";
-import { Ticket } from "@prisma/client";
 import prisma from "../../../../prisma/db";
 import TicketDisplay from "@/components/TicketDisplay";
+import { ticketWithId } from "@/data-access/ticketdata";
+import { Ticket } from "@prisma/client";
 
-interface TicketPageProps {
+export interface TicketPageProps {
   params: { id: string };
 }
 
 const TicketPage: NextPage<TicketPageProps> = async ({
   params,
 }: TicketPageProps) => {
-  const ticket = await prisma?.ticket.findUnique({
-    where: { id: parseInt(params.id) },
-  });
-  const users = await prisma.user.findMany()
+  const ticket  = await ticketWithId({ params }) as Ticket;
+  const users = await prisma.user.findMany();
   if (!ticket) {
     return <p className="text-destructive">Ticket not found!</p>;
   }
@@ -24,4 +23,4 @@ const TicketPage: NextPage<TicketPageProps> = async ({
   );
 };
 
-export default TicketPage
+export default TicketPage;

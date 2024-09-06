@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
+  provider     = "postgresql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
@@ -18,7 +18,7 @@ model Ticket {
   status           Status   @default(OPEN)
   priority         Priority @default(MEDIUM)
   createdAt        DateTime @default(now())
-  UpdatedAt        DateTime @updatedAt
+  updatedAt        DateTime @updatedAt
   assignedToUserId Int?
   assignedToUser   User?    @relation(fields: [assignedToUserId], references: [id])
 }

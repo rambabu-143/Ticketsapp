@@ -8,7 +8,6 @@ import {
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
-import prisma from "../../prisma/db";
 
 interface PagenationProps {
   itemCount: number;
@@ -17,17 +16,18 @@ interface PagenationProps {
 }
 
 const Pagenation = ({ itemCount, pageSize, currentPage }: PagenationProps) => {
+  const router = useRouter();
+const searchParams = useSearchParams();
+
   const pageCount = Math.ceil(itemCount / pageSize);
   if (pageCount <= 1) return null;
-
-  const router = useRouter();
-  const searchParams = useSearchParams();
 
   const changePage = (page: number) => {
     const params = new URLSearchParams(searchParams);
     params.set("page", page.toString());
-    router.push("?" + params.toString());
+    router.push(`?${params.toString()}`);
   };
+
   return (
     <div className="mt-4 flex flex-col gap-4 px-3">
       <div>
@@ -62,7 +62,7 @@ const Pagenation = ({ itemCount, pageSize, currentPage }: PagenationProps) => {
       </div>
       <div>
         <p>
-          Page {currentPage}of {pageCount}
+          Page {currentPage} of {pageCount}
         </p>
       </div>
     </div>

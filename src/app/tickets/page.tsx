@@ -1,48 +1,72 @@
 import Link from "next/link";
-import prisma from "../../../prisma/db";
 import Datatable from "./datatable";
 import { Button } from "@/components/ui/button";
 import Pagenation from "@/components/Pagenation";
 import StatusFilter from "@/components/statusFilter";
 import { Status } from "@prisma/client";
+import { getTicketPageTickets } from "@/data-access/ticketdata";
+import SearchBar from "@/components/SearchBar";
+import dayjs from "dayjs";
+import DateFilter from "@/components/dateFilter";
 
 interface SearchParams {
   status?: Status;
   page?: string;
+  search: string;
+  description: string;
+  dateFilter: string;
 }
 
 const page = async ({ searchParams }: { searchParams: SearchParams }) => {
   const pageSize = 10;
-  const pageNumber = parseInt(searchParams.page || "1", 10);
-  const statuses = Object.values(Status);
+  const pageNumber: number = parseInt(searchParams.page || "1", 10);
+  const today = dayjs().format("YYYY-MM-DD");
+  const tomorrow = dayjs().add(1, "day").format("YYYY-MM-DD");
+  const yesterday = dayjs().subtract(1, "day").format("YYYY-MM-DD");
 
-  const status = statuses.includes(searchParams.status as Status)
-    ? (searchParams.status as Status)
-    : undefined;
+  let dateFilter = searchParams.dateFilter || "";
+  if (searchParams.dateFilter === "today") {
+    dateFilter = today;
+  } else if (searchParams.dateFilter === "tomorrow") {
+    dateFilter = tomorrow;
+  } else if (searchParams.dateFilter === "yesterday") {
+    dateFilter = yesterday;
+  }
 
-  const where = status
-    ? { status }
-    : { NOT: { status: Status.CLOSE } }; 
-
-  const ticketcount = await prisma.ticket.count({ where });
-  const tickets = await prisma.ticket.findMany({
-    where,
-    take: pageSize,
-    skip: (pageNumber - 1) * pageSize,
+  const { tickets, ticketcount } = await getTicketPageTickets({
+    status: searchParams.status,
+    search: searchParams.search,
+    description: searchParams.description,
+    pageNumber,
+    pageSize,
+    dateFilter,
   });
 
   return (
     <div className="flex flex-col gap-6 p-4">
+      <SearchBar initialSearch={searchParams.search} />
+
       <Link href="/tickets/new">
         <Button>New Ticket</Button>
       </Link>
+
       <StatusFilter />
-      <Datatable tickets={tickets} />
-      <Pagenation
-        itemCount={ticketcount}
-        currentPage={pageNumber}
-        pageSize={pageSize}
-      />
+
+      <DateFilter />
+
+      {tickets.length === 0 ? (
+        <div className="text-center text-gray-500">No tickets were found.</div>
+      ) : (
+        <>
+          <Datatable tickets={tickets} />
+
+          <Pagenation
+            itemCount={ticketcount}
+            currentPage={pageNumber}
+            pageSize={pageSize}
+          />
+        </>
+      )}
     </div>
   );
 };

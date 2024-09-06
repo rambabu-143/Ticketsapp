@@ -21,21 +21,22 @@ const DashRecentTickets = ({ tickets }: Props) => {
       </CardHeader>
       <CardContent>
         <div className="space-y-8">
-          {tickets
-            ? tickets.map((ticket) => (
-                <div className="flex items-center" key={ticket.id}>
-                  <Ticketsstatusbatch status={ticket.status} />
-                  <div className="ml-4 space-y-1">
-                    <Link href={`tickets/${ticket.id}`}></Link>
-                    <p>{ticket.title}</p>
-                    <p>{ticket.assignedToUser?.name || "Unassigned"}</p>
-                  </div>
-                  <div className="flex ml-4">
-                    <Ticketpriority priority={ticket.priority}/>
-                  </div>
-                </div>
-              ))
-            : null}
+          {tickets.map((ticket) => (
+            <div className="flex items-center" key={ticket.id}>
+              <Ticketsstatusbatch status={ticket.status} />
+              <div className="ml-4 space-y-1">
+                <Link href={`tickets/${ticket.id}`}>
+                  <p className="font-medium">{ticket.title}</p>
+                </Link>
+                <p className="text-sm text-muted-foreground">
+                  {ticket.assignedToUser?.name || "Unassigned"}
+                </p>
+              </div>
+              <div className="ml-auto">
+                <Ticketpriority priority={ticket.priority} />
+              </div>
+            </div>
+          ))}
         </div>
       </CardContent>
     </Card>

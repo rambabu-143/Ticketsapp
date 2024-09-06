@@ -38,9 +38,7 @@ const Datatable = ({ tickets }: Dataprops) => {
             {tickets.map((ticket) => (
               <TableRow key={ticket.id}>
                 <TableCell>
-                  <Link href={`/tickets/${ticket.id}`}>
-                    {ticket.title}
-                  </Link>
+                  <Link href={`/tickets/${ticket.id}`}>{ticket.title}</Link>
                 </TableCell>
                 <TableCell>
                   <div className="flex justify-center">
