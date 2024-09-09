@@ -2,8 +2,7 @@
 
 import { Ticket, User } from "@prisma/client";
 import { useState } from "react";
-import { Select, SelectTrigger, SelectValue } from "./ui/select";
-import { SelectContent, SelectItem } from "@radix-ui/react-select";
+import { Select, SelectTrigger, SelectValue ,SelectContent,SelectItem } from "./ui/select";
 import axios from "axios";
 
 const AssignTicket = ({ ticket, user }: { ticket: Ticket; user: User[] }) => {
@@ -24,6 +23,8 @@ const AssignTicket = ({ ticket, user }: { ticket: Ticket; user: User[] }) => {
     setIsAssigning(false);
   };
 
+  console.log(ticket)
+
   return (
     <>
       <Select
@@ -31,8 +32,10 @@ const AssignTicket = ({ ticket, user }: { ticket: Ticket; user: User[] }) => {
         onValueChange={assignTicket}
         disabled={isAssigning}
       >
-        <SelectTrigger>
+        <SelectTrigger
+        >
           <SelectValue
+          
             placeholder="Select user"
             defaultValue={ticket.assignedToUserId?.toString() || "0"}
           ></SelectValue>

@@ -27,7 +27,7 @@ const DeleteButton: React.FC<DeleteButtonProps> = ({ ticketId }) => {
   return (
     <button
       onClick={handleDelete}
-      className="text-red-500 hover:underline"
+      className="text-white hover:underline bg-red-600 py-4 px-8"
     >
       Delete
     </button>

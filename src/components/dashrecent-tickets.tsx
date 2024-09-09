@@ -32,7 +32,7 @@ const DashRecentTickets = ({ tickets }: Props) => {
                   {ticket.assignedToUser?.name || "Unassigned"}
                 </p>
               </div>
-              <div className="ml-auto">
+              <div className="flex ml-auto">
                 <Ticketpriority priority={ticket.priority} />
               </div>
             </div>
