@@ -2,6 +2,7 @@ import DashRecentTickets from "@/components/dashrecent-tickets";
 import DashChart from "@/components/dashChart";
 import { getGroupticket, getHomeTicket } from "@/data-access/ticketdata";
 import AssignedToSpecificUser from "@/components/assignedToSpecificUser";
+import { Ticket } from "@prisma/client";
 
 export default async function Home() {
   const tickets = await getHomeTicket();
@@ -15,13 +16,14 @@ export default async function Home() {
     };
   });
 
+  console.log(tickets);
 
   return (
     <>
       <div className="grid gap-4 md:grid-cols-2 p-4">
         <div className="flex flex-col gap-3">
           <DashRecentTickets tickets={tickets} />
-          <AssignedToSpecificUser />
+          <AssignedToSpecificUser tickets={tickets}/>
         </div>
         <div>
           <DashChart data={data} />

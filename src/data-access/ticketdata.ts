@@ -2,8 +2,6 @@ import { Status } from "@prisma/client";
 import prisma from "../../prisma/db";
 import { TicketPageProps } from "@/app/tickets/[id]/page";
 import dayjs from "dayjs";
-import { getServerSession } from "next-auth";
-import options from "@/app/api/auth/[...nextauth]/options";
 
 interface GetTicketPageTicketsParams {
   status?: Status;
@@ -63,12 +61,12 @@ export const getTicketPageTickets = async ({
     };
   }
   if (dateFilter) {
-    const startOfDay = new Date(dayjs(dateFilter).startOf("day").toISOString());
-    const endOfDay = new Date(dayjs(dateFilter).endOf("day").toISOString());
+    const startOfDay = new Date(dayjs(dateFilter).startOf('day').toISOString());
+    const endOfDay = new Date(dayjs(dateFilter).endOf('day').toISOString());
 
     where.createdAt = {
-      gte: startOfDay,
-      lte: endOfDay,
+      gte: startOfDay, 
+      lte: endOfDay,   
     };
   }
 
@@ -92,23 +90,4 @@ export const ticketWithId = async ({ params }: TicketPageProps) => {
   });
 
   return ticket;
-};
-
-export const getAssignedTickets = async () => {
-  const session = await getServerSession(options);
-  if (!session?.user?.name) {
-    return [];
-  }
-
-  const tickets = await prisma.ticket.findMany({
-    where: {
-      assignedToUser: {
-        name: session.user.name,
-      },
-    },
-    include: {
-      assignedToUser: true,
-    },
-  });
-  return tickets;
 };
