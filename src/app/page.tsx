@@ -16,14 +16,13 @@ export default async function Home() {
     };
   });
 
-  console.log(tickets);
 
   return (
     <>
       <div className="grid gap-4 md:grid-cols-2 p-4">
         <div className="flex flex-col gap-3">
           <DashRecentTickets tickets={tickets} />
-          <AssignedToSpecificUser tickets={tickets}/>
+          <AssignedToSpecificUser />
         </div>
         <div>
           <DashChart data={data} />
