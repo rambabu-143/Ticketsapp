@@ -2,7 +2,6 @@ import DashRecentTickets from "@/components/dashrecent-tickets";
 import DashChart from "@/components/dashChart";
 import { getGroupticket, getHomeTicket } from "@/data-access/ticketdata";
 import AssignedToSpecificUser from "@/components/assignedToSpecificUser";
-import { Ticket } from "@prisma/client";
 
 export default async function Home() {
   const tickets = await getHomeTicket();

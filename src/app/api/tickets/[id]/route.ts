@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ticketPatchSchema } from "../../../../../ValidationSchemas/ticket";
+import { ticketPatchSchema } from "../../../../ValidationSchemas/ticket";
 import prisma from "../../../../../prisma/db";
 
 interface Props {

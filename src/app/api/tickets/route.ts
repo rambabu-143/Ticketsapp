@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ticketSchema } from "../../../../ValidationSchemas/ticket";
+import { ticketSchema } from "../../../ValidationSchemas/ticket";
 import prisma from "../../../../prisma/db";
 import { getServerSession } from "next-auth";
 import options from "../auth/[...nextauth]/options";

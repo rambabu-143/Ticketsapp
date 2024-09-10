@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../../prisma/db";
 import bcrypt from "bcryptjs";
-import { userSchema } from "../../../../../ValidationSchemas/users";
+import { userSchema } from "../../../../ValidationSchemas/users";
 
 interface Props {
   params: { id: string };

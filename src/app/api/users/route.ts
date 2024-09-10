@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { userSchema } from "../../../../ValidationSchemas/users";
+import { userSchema } from "../../../ValidationSchemas/users";
 import prisma from "../../../../prisma/db";
 import bcrypt from "bcryptjs";
 

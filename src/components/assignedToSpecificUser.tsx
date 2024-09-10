@@ -1,7 +1,3 @@
-import React from "react";
-import { Ticket, Role } from "@prisma/client";
-import { getServerSession } from "next-auth";
-import options from "@/app/api/auth/[...nextauth]/options";
 import { getAssignedTickets } from "@/data-access/ticketdata";
 
 

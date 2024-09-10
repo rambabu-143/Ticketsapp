@@ -96,17 +96,16 @@ export const ticketWithId = async ({ params }: TicketPageProps) => {
 
 export const getAssignedTickets = async () => {
   const session = await getServerSession(options);
-  if (!session?.user?.name) {
+  console.log(session);
+  if (!session!.user.id) {
     return [];
   }
+
   const tickets = await prisma.ticket.findMany({
     where: {
       assignedToUser: {
-        name: session.user.name,
+        id: session!.user.id,
       },
-    },
-    include: {
-      assignedToUser: true, 
     },
   });
 
