@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import { getServerSession } from "next-auth";
 import options from "@/app/api/auth/[...nextauth]/options";
 
+
 interface GetTicketPageTicketsParams {
   status?: Status;
   pageNumber: number;
@@ -97,14 +98,13 @@ export const ticketWithId = async ({ params }: TicketPageProps) => {
 export const getAssignedTickets = async () => {
   const session = await getServerSession(options);
   console.log(session);
-  if (!session!.user.id) {
+  if (!session?.user?.id) {
     return [];
   }
-
   const tickets = await prisma.ticket.findMany({
     where: {
       assignedToUser: {
-        id: session!.user.id,
+        id: session.user.id,
       },
     },
   });
