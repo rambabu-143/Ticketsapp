@@ -8,7 +8,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./ui/input";
 import SimpleMdeReact from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
-import axios from "axios";
 import {
   Select,
   SelectContent,
@@ -19,7 +18,7 @@ import {
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { TicketFire } from "@/firebase-types/types";
-import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/app/firebase/firebase.config";
 
 type Tickeformdata = z.infer<typeof ticketSchema>;

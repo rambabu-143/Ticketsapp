@@ -1,16 +1,16 @@
 
-enum Status {
+export enum Status {
     OPEN = 'OPEN',
     IN_PROGRESS = 'IN_PROGRESS',
     CLOSED = 'CLOSED',
 }
 
-enum Priority {
+export enum Priority {
     LOW = 'LOW',
     MEDIUM = 'MEDIUM',
     HIGH = 'HIGH',
 }
-enum Role {
+export enum Role {
     USER = 'USER',
     ADMIN = 'ADMIN',
 }
