@@ -1,8 +1,9 @@
+import { Timestamp } from "firebase/firestore";
 
 export enum Status {
     OPEN = 'OPEN',
-    IN_PROGRESS = 'IN_PROGRESS',
-    CLOSED = 'CLOSED',
+    STARTED = 'STARTED',
+    CLOSE = 'CLOSED',
 }
 
 export enum Priority {
@@ -18,7 +19,7 @@ export enum Role {
 
 
 export interface UserFire {
-    id: number;
+    id: string;
     name: string;
     username: string;
     password: string;
@@ -27,13 +28,13 @@ export interface UserFire {
 }
 
 export interface TicketFire {
-    id: number;
+    id: string ;
     title: string;
     description: string;
     status: Status;
     priority: Priority;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: Timestamp;
+    updatedAt: Timestamp;
     assignedToUserId?: number | null;
     assignedToUser?: UserFire | null;
 }

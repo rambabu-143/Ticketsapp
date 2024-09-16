@@ -1,4 +1,4 @@
-import { Status } from "@prisma/client";
+import { Status } from "@/firebase-types/types";
 import { Badge } from "./ui/badge";
 
 interface ticketprops {
@@ -11,7 +11,8 @@ const statusMap: Record<
 > = {
   OPEN: { label: "Open", color: "bg-blue-400" },
   STARTED: { label: "Started", color: "bg-green-400" },
-  CLOSE: { label: "Closed", color: "bg-red-400" },
+  CLOSED: { label: "Closed", color: "bg-red-400" },
+
 };
 const Ticketsstatusbatch = ({ status }: ticketprops) => {
   return <div>

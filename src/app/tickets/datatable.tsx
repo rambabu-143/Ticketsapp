@@ -8,14 +8,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Ticket } from "@prisma/client";
+import { Status, TicketFire } from "@/firebase-types/types";
+import { Timestamp } from "firebase/firestore";
 import Link from "next/link";
 
 interface Dataprops {
-  tickets: Ticket[];
+  tickets: TicketFire[];
 }
 
+
+
 const Datatable = ({ tickets }: Dataprops) => {
+  const formatTimestamp = (timestamp: Timestamp): string => {
+    if (timestamp) {
+      return new Date(timestamp.toDate()).toLocaleString(); 
+    }
+    return 'No Date';
+  };
+
+
   return (
     <div className="w-full mt-5">
       <div className="rounded-lg sm:border">
@@ -42,7 +53,7 @@ const Datatable = ({ tickets }: Dataprops) => {
                 </TableCell>
                 <TableCell>
                   <div className="flex justify-center">
-                    <Ticketsstatusbatch status={ticket.status} />
+                    <Ticketsstatusbatch status={ticket.status as Status} />
                   </div>
                 </TableCell>
 
@@ -52,14 +63,7 @@ const Datatable = ({ tickets }: Dataprops) => {
                   </div>
                 </TableCell>
                 <TableCell>
-                  {new Date(ticket.createdAt).toLocaleDateString("en-IN", {
-                    year: "2-digit",
-                    month: "2-digit",
-                    day: "2-digit",
-                    hour: "numeric",
-                    minute: "2-digit",
-                    hour12: true,
-                  })}
+                  {formatTimestamp(ticket.createdAt)}
                 </TableCell>
               </TableRow>
             ))}

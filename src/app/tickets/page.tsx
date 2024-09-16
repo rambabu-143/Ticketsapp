@@ -3,14 +3,15 @@ import Datatable from "./datatable";
 import { Button } from "@/components/ui/button";
 import Pagenation from "@/components/Pagenation";
 import StatusFilter from "@/components/statusFilter";
-import { Status } from "@prisma/client";
+import { Status as statusFire } from "@/firebase-types/types";
 import { getTicketPageTickets } from "@/data-access/ticketdata";
 import SearchBar from "@/components/SearchBar";
 import dayjs from "dayjs";
 import DateFilter from "@/components/dateFilter";
+import { TicketFire } from "@/firebase-types/types";
 
 interface SearchParams {
-  status?: Status;
+  status?: statusFire;
   page?: string;
   search: string;
   description: string;
@@ -58,7 +59,7 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
         <div className="text-center text-gray-500">No tickets were found.</div>
       ) : (
         <>
-          <Datatable tickets={tickets} />
+          <Datatable tickets={tickets as TicketFire[]} />
 
           <Pagenation
             itemCount={ticketcount}

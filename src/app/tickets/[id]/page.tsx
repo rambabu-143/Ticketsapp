@@ -2,7 +2,7 @@ import { GetServerSideProps, NextPage } from "next";
 import prisma from "../../../../prisma/db";
 import TicketDisplay from "@/components/TicketDisplay";
 import { ticketWithId } from "@/data-access/ticketdata";
-import { Ticket } from "@prisma/client";
+import { TicketFire } from "@/firebase-types/types";
 
 export interface TicketPageProps {
   params: { id: string };
@@ -11,7 +11,7 @@ export interface TicketPageProps {
 const TicketPage: NextPage<TicketPageProps> = async ({
   params,
 }: TicketPageProps) => {
-  const ticket  = await ticketWithId({ params }) as Ticket;
+  const ticket  = await ticketWithId({ params }) as TicketFire;
   const users = await prisma.user.findMany();
   if (!ticket) {
     return <p className="text-destructive">Ticket not found!</p>;

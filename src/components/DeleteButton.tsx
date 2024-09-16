@@ -5,7 +5,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 
 interface DeleteButtonProps {
-  ticketId: number;
+  ticketId: string;
 }
 
 const DeleteButton: React.FC<DeleteButtonProps> = ({ ticketId }) => {

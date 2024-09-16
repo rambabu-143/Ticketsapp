@@ -1,13 +1,14 @@
 // components/TicketDisplay.tsx
 import React from "react";
 import { Ticket, User } from "@prisma/client";
+import { TicketFire , UserFire } from "@/firebase-types/types";
 import Link from "next/link";
 import DeleteButton from "./DeleteButton";
 import AssignTicket from "./assignticket";
 
 interface TicketDisplayProps {
-  ticket: Ticket;
-  users: User[];
+  ticket: TicketFire;
+  users: UserFire[];
 }
 
 const TicketDisplay: React.FC<TicketDisplayProps> = ({ ticket, users }) => {

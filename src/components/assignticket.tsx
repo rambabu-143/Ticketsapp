@@ -1,11 +1,11 @@
 "use client";
 
-import { Ticket, User } from "@prisma/client";
+import { TicketFire , UserFire } from "@/firebase-types/types";
 import { useState } from "react";
 import { Select, SelectTrigger, SelectValue ,SelectContent,SelectItem } from "./ui/select";
 import axios from "axios";
 
-const AssignTicket = ({ ticket, user }: { ticket: Ticket; user: User[] }) => {
+const AssignTicket = ({ ticket, user }: { ticket: TicketFire; user: UserFire[] }) => {
   const [isAssigning, setIsAssigning] = useState(false);
   const [error, seterror] = useState("");
 
