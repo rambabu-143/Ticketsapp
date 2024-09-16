@@ -4,6 +4,7 @@ import { Role } from "@prisma/client";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/app/firebase/firebase.config";
 import GoogleProvider from "next-auth/providers/google";
+import { User } from "@prisma/client";
 
 const options: NextAuthOptions = {
   pages: {
@@ -25,18 +26,18 @@ const options: NextAuthOptions = {
       authorize: async (credentials) => {
         if (!credentials) return null;
 
-        // if (
-        //   credentials.email == "admin@gmail.com" &&
-        //   credentials.password == "admin"
-        // ) {
-        //   return {
-        //     id: 0,
-        //     name: "Admin",
-        //     username: "admin",
-        //     password: "admin",
-        //     role: Role.ADMIN,
-        //   } as User;
-        // }
+        if (
+          credentials.email == "admin@gmail.com" &&
+          credentials.password == "admin"
+        ) {
+          return {
+            id: 0,
+            name: "Admin",
+            username: "admin",
+            password: "admin",
+            role: Role.ADMIN,
+          } as User;
+        }
 
         try {
           const userCredential = await signInWithEmailAndPassword(

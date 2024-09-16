@@ -1,6 +1,7 @@
 // components/TicketDisplay.tsx
 import React from "react";
 import { Ticket, User } from "@prisma/client";
+import { formatTimestamp } from "@/app/tickets/datatable";
 import { TicketFire , UserFire } from "@/firebase-types/types";
 import Link from "next/link";
 import DeleteButton from "./DeleteButton";
@@ -27,13 +28,7 @@ const TicketDisplay: React.FC<TicketDisplayProps> = ({ ticket, users }) => {
         </div>
         <div className="mt-4 text-sm text-gray-500">
           Created At:{" "}
-          {new Date(ticket.createdAt).toLocaleDateString("en-IN", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
+          {formatTimestamp(ticket.createdAt)}
         </div>
       </div>
       <div className="flex flex-col justify-start mt-3 w-1/2 items-center gap-5">

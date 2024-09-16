@@ -65,17 +65,15 @@ export const getTicketPageTickets = async ({
   dateFilter,
 }: GetTicketPageParams) => {
   try {
-    console.log('Query parameters:', { status, pageNumber, pageSize, search, dateFilter });
 
     const ticketRef = collection(db, 'tickets');
     let q = query(ticketRef);
 
     if (status && status !== statusFire.CLOSE) {
       q = query(q, where('status', '==', status));
-      console.log('After status filter:', q);
     } else {
       q = query(q, where('status', '!=', "CLOSE"));
-      console.log('After default status filter:', q);
+
     }
 
     // if (search) {
@@ -87,21 +85,19 @@ export const getTicketPageTickets = async ({
       const startOfDay = dayjs(dateFilter).startOf('day').toDate();
       const endOfDay = dayjs(dateFilter).endOf('day').toDate();
       q = query(q, where('createdAt', '>=', startOfDay), where('createdAt', '<=', endOfDay));
-      console.log('After date filter:', q);
     }
 
     q = query(q, orderBy('status', 'desc'), orderBy('updatedAt', 'desc'));
-    console.log('After ordering:', q);
+
 
     // First, try without pagination
     const allDocsSnapshot = await getDocs(q);
-    console.log('Total matching documents:', allDocsSnapshot.size);
+
 
 
     q = query(q, limit(pageSize), startAfter((pageNumber - 1) * pageSize))
     // Then apply pagination
     const snapshot = await getDocs(q);
-    console.log('Documents after pagination:', snapshot.size);
 
     const ticketcount = snapshot.size;
 
@@ -112,11 +108,9 @@ export const getTicketPageTickets = async ({
       }
     });
 
-    console.log('Processed tickets:', tickets.length);
 
     return { tickets, ticketcount };
   } catch (error) {
-    console.error('Error fetching tickets:', error);
     throw error;
   }
 };

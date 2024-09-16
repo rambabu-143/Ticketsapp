@@ -17,12 +17,14 @@ import {
 } from "./ui/select";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
-import { User } from "@prisma/client";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
+import { db } from "@/app/firebase/firebase.config";
+import { UserFire } from "@/firebase-types/types";
 
 type Userformdata = z.infer<typeof userSchema>;
 
 interface Props {
-  user?: User;
+  user?: UserFire;
 }
 
 const Userform = ({ user }: Props) => {
@@ -39,10 +41,18 @@ const Userform = ({ user }: Props) => {
       setissubmitting(true);
       seterror("");
       if (user) {
-        await axios.patch("/api/users/" + user.id, values);
+        const userRef = doc(db, "users", String(user.id));
+        await updateDoc(userRef, values);
       } else {
-        await axios.post("/api/users", values);
+        await addDoc(collection(db, "users"), {
+          name: values.name,
+          username: values.username,
+          role: values.role,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
       }
+      router.push('/users')
       router.refresh();
     } catch (error) {
       console.error(error);

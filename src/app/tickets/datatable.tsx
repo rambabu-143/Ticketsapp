@@ -18,13 +18,13 @@ interface Dataprops {
 
 
 
+export const formatTimestamp = (timestamp: Timestamp): string => {
+  if (timestamp) {
+    return new Date(timestamp.toDate()).toLocaleString();
+  }
+  return 'No Date';
+};
 const Datatable = ({ tickets }: Dataprops) => {
-  const formatTimestamp = (timestamp: Timestamp): string => {
-    if (timestamp) {
-      return new Date(timestamp.toDate()).toLocaleString(); 
-    }
-    return 'No Date';
-  };
 
 
   return (

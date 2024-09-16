@@ -6,11 +6,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { User } from "@prisma/client";
+import { UserFire } from "@/firebase-types/types";
 import Link from "next/link";
 
 interface Dataprops {
-  users: User[];
+  users: UserFire[];
 }
 const Datatable = ({ users }: Dataprops) => {
   return (

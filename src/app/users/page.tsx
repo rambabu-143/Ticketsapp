@@ -1,22 +1,22 @@
 import Userform from "@/components/userForm";
 import React from "react";
 import Datatable from "./datatable";
-import prisma from "../../../prisma/db";
-import { getServerSession } from "next-auth";
-import options from "../api/auth/[...nextauth]/options";
 import { getUserdata } from "@/data-access/userdata";
+import { UserFire } from "@/firebase-types/types";
 
-const page = async() => {
-// const session = await getServerSession(options)
+const page = async () => {
+  // const session = await getServerSession(options)
 
-//   if(session?.user.role !== 'ADMIN'){
-//     return <p className="text-destructive">Admin access required</p>
-//   }
+  //   if(session?.user.role !== 'ADMIN'){
+  //     return <p className="text-destructive">Admin access required</p>
+  //   }
   const users = await getUserdata()
+
+  console.log("res::", users)
   return (
     <div>
       <Userform />
-      <Datatable users={users} />
+      <Datatable users={users as UserFire[]} />
     </div>
   );
 };
