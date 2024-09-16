@@ -18,12 +18,14 @@ import {
 } from "./ui/select";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
-import { Ticket } from "@prisma/client";
+import { TicketFire } from "@/firebase-types/types";
+import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
+import { db } from "@/app/firebase/firebase.config";
 
 type Tickeformdata = z.infer<typeof ticketSchema>;
 
 interface Props {
-  ticket?: Ticket;
+  ticket?: TicketFire;
 }
 
 const Ticketform = ({ ticket }: Props) => {
@@ -40,9 +42,19 @@ const Ticketform = ({ ticket }: Props) => {
       setissubmitting(true);
       seterror("");
       if (ticket) {
-        await axios.patch("/api/tickets/" + ticket.id ,values);
+        const ticketRef = doc(db, "tickets", String(ticket.id)); 
+        await updateDoc(ticketRef, values);
       } else {
-        await axios.post("/api/tickets", values);
+
+        await addDoc(collection(db, "tickets"), {
+          title: values.title,
+          description: values.description,
+          status: values.status,
+          priority: values.priority,
+          // assignedToUserId: values.assignedToUserId || null,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
       }
       router.push("/tickets");
       router.refresh();
@@ -134,7 +146,7 @@ const Ticketform = ({ ticket }: Props) => {
             ></FormField>
           </div>
           <Button type="submit" disabled={issubmitting}>
-            {ticket ? 'Update Tiket':"Create Ticket"}
+            {ticket ? 'Update Tiket' : "Create Ticket"}
           </Button>
         </form>
       </Form>
