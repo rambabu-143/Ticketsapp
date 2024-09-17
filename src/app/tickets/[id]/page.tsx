@@ -1,5 +1,4 @@
-import { GetServerSideProps, NextPage } from "next";
-import prisma from "../../../../prisma/db";
+import {  NextPage } from "next";
 import TicketDisplay from "@/components/TicketDisplay";
 import { ticketWithId } from "@/data-access/ticketdata";
 import { TicketFire, UserFire } from "@/firebase-types/types";
@@ -26,6 +25,10 @@ const TicketPage: NextPage<TicketPageProps> = async ({
   if (!ticket) {
     return <p className="text-destructive">Ticket not found!</p>;
   }
+
+
+  console.log('tikets are ::::' ,ticket)
+  console.log('users are :::',users)
   return (
     <div className="container mx-auto p-4">
       <TicketDisplay ticket={ticket} users={users as UserFire[]} />

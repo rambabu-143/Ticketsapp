@@ -3,6 +3,8 @@
 import React from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db } from "@/app/firebase/firebase.config";
 
 interface DeleteButtonProps {
   ticketId: string;
@@ -16,7 +18,8 @@ const DeleteButton: React.FC<DeleteButtonProps> = ({ ticketId }) => {
     if (!confirmed) return;
 
     try {
-      await axios.delete(`/api/tickets/${ticketId}`);
+      const ticketDoc = doc(db, "tickets", ticketId); 
+      await deleteDoc(ticketDoc);
       router.push("/tickets");
       router.refresh();
     } catch (error) {

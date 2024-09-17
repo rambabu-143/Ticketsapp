@@ -4,6 +4,7 @@ import Userform from "@/components/userForm";
 import { getServerSession } from "next-auth";
 import options from "@/app/api/auth/[...nextauth]/options";
 import { usersWithId } from "@/data-access/userdata";
+import { UserFire } from "@/firebase-types/types";
 
 export interface UserIdProps {
   params: { id: string };
@@ -20,7 +21,7 @@ const Edituser = async ({ params }: UserIdProps,) => {
   }
 
   user.password = "";
-  return <Userform user={user}></Userform>;
+  return <Userform user={user as UserFire}></Userform>;
 };
 
 export default Edituser;

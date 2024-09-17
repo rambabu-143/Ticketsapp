@@ -67,17 +67,14 @@ const options: NextAuthOptions = {
   callbacks: {
     async jwt({ token, account, user }) {
       if (account && user) {
-        console.log("user:", user);
-        token.role = user.role;
+        token.role = user.role || 'ADMIN';
       }
       return token;
     },
     session({ session, token }) {
       if (session.user) {
-        session.user.role = token.role;
+        session.user.role = token.role || "ADMIN";
         session.user.id = token.id as number;
-        console.log("session:", session, "token:", token);
-        console.log("session:", session);
       }
       return session;
     },

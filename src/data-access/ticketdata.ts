@@ -128,17 +128,20 @@ export const ticketWithId = async ({ params }: TicketPageProps) => {
 
 export const getAssignedTickets = async () => {
   const session = await getServerSession(options);
-  console.log(session);
   if (!session?.user?.id) {
     return [];
   }
-  const tickets = await prisma.ticket.findMany({
-    where: {
-      assignedToUser: {
-        id: session.user.id,
-      },
-    },
-  });
+console.log("the user id is :::",session.user.id)
+  const ticketRef = collection(db, 'tickets')
+  let q = query(ticketRef, where('assignedToUserId', '==', session.user.id))
+  const mytickets = await getDocs(q)
+  const tickets = mytickets.docs.map((doc) => {
+    return {
+      id:doc.id,
+      ...doc.data()
+    }
+  })
+
 
   return tickets;
 };

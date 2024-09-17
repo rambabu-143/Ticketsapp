@@ -1,9 +1,10 @@
 "use client";
 
-import { TicketFire , UserFire } from "@/firebase-types/types";
+import { TicketFire, UserFire } from "@/firebase-types/types";
 import { useState } from "react";
-import { Select, SelectTrigger, SelectValue ,SelectContent,SelectItem } from "./ui/select";
-import axios from "axios";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "./ui/select";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "@/app/firebase/firebase.config";
 
 const AssignTicket = ({ ticket, user }: { ticket: TicketFire; user: UserFire[] }) => {
   const [isAssigning, setIsAssigning] = useState(false);
@@ -12,14 +13,19 @@ const AssignTicket = ({ ticket, user }: { ticket: TicketFire; user: UserFire[] }
   const assignTicket = async (userId: string) => {
     seterror("");
     setIsAssigning(true);
-    await axios
-      .patch(`/api/tickets/${ticket.id}`, {
+
+
+    try {
+
+      const ticketRef = doc(db, 'tickets', ticket.id)
+      await updateDoc(ticketRef, {
         assignedToUserId: userId === "0" ? null : userId,
-      })
-      .catch(() => {
-        seterror("Unable to assign ticket");
       });
-    console.log(error);
+    }
+    catch (error) {
+      console.error("Unable to assign ticket: ", error);
+      seterror("Unable to assign ticket");
+    }
     setIsAssigning(false);
   };
 
@@ -35,7 +41,7 @@ const AssignTicket = ({ ticket, user }: { ticket: TicketFire; user: UserFire[] }
         <SelectTrigger
         >
           <SelectValue
-          
+
             placeholder="Select user"
             defaultValue={ticket.assignedToUserId?.toString() || "0"}
           ></SelectValue>
