@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./ui/input";
 
+import axios from "axios";
 import {
   Select,
   SelectContent,
@@ -24,9 +25,10 @@ type Userformdata = z.infer<typeof userSchema>;
 
 interface Props {
   user?: UserFire;
+  params:{id:string}
 }
 
-const Userform = ({ user }: Props) => {
+const Userform = ({ user ,params }: Props) => {
   const form = useForm<Userformdata>({
     resolver: zodResolver(userSchema),
   });
@@ -40,7 +42,7 @@ const Userform = ({ user }: Props) => {
       setissubmitting(true);
       seterror("");
       if (user) {
-        const userRef = doc(db, "users", String(user.id));
+        const userRef = doc(db, "users", params.id);
         await updateDoc(userRef, values);
       } else {
         await addDoc(collection(db, "users"), {

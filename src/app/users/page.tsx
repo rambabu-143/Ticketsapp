@@ -7,11 +7,12 @@ import { UserFire } from "@/firebase-types/types";
 const page = async () => {
 
   const users = await getUserdata()
+  const params ={id:""}
 
   console.log("res::", users)
   return (
     <div>
-      <Userform />
+      <Userform  params={params}/>
       <Datatable users={users as UserFire[]} />
     </div>
   );

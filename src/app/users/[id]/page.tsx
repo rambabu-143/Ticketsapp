@@ -21,7 +21,7 @@ const Edituser = async ({ params }: UserIdProps,) => {
   }
 
   user.password = "";
-  return <Userform user={user as UserFire}></Userform>;
+  return <Userform user={user as UserFire} params={params}></Userform>;
 };
 
 export default Edituser;

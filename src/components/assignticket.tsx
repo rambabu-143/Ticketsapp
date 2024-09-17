@@ -29,7 +29,6 @@ const AssignTicket = ({ ticket, user }: { ticket: TicketFire; user: UserFire[] }
     setIsAssigning(false);
   };
 
-  console.log(ticket)
 
   return (
     <>

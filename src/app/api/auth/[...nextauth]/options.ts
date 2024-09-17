@@ -4,7 +4,7 @@ import { Role } from "@prisma/client";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/app/firebase/firebase.config";
 import GoogleProvider from "next-auth/providers/google";
-import { User } from "@prisma/client";
+import { UserFire } from "@/firebase-types/types";
 
 const options: NextAuthOptions = {
   pages: {
@@ -36,7 +36,7 @@ const options: NextAuthOptions = {
             username: "admin",
             password: "admin",
             role: Role.ADMIN,
-          } as User;
+          } ;
         }
 
         try {
@@ -67,14 +67,18 @@ const options: NextAuthOptions = {
   callbacks: {
     async jwt({ token, account, user }) {
       if (account && user) {
+        console.log("user:", user);
         token.role = user.role || 'ADMIN';
+        token.id = user.id ;
+        console.log("user LLLLLz")
       }
       return token;
     },
     session({ session, token }) {
       if (session.user) {
-        session.user.role = token.role || "ADMIN";
-        session.user.id = token.id as number;
+        session.user.role = token.role || 'ADMIN';
+        session.user.id = token.id ;
+        console.log("session:", session, "token:", token);
       }
       return session;
     },

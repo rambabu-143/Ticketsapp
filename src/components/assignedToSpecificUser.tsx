@@ -3,9 +3,6 @@ import { getAssignedTickets } from "@/data-access/ticketdata";
 
 const AssignedToSpecificUser = async () => {
   const tickets = await getAssignedTickets()
-
-
-  console.log('your tickets are :::::',tickets)
   return (
     <div>
 

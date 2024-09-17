@@ -131,13 +131,12 @@ export const getAssignedTickets = async () => {
   if (!session?.user?.id) {
     return [];
   }
-console.log("the user id is :::",session.user.id)
+
   const ticketRef = collection(db, 'tickets')
-  let q = query(ticketRef, where('assignedToUserId', '==', session.user.id))
+  let q = query(ticketRef, where('assignedToUser', '==', session.user.id))
   const mytickets = await getDocs(q)
   const tickets = mytickets.docs.map((doc) => {
     return {
-      id:doc.id,
       ...doc.data()
     }
   })

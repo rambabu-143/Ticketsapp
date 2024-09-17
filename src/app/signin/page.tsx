@@ -3,6 +3,8 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../firebase/firebase.config";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
@@ -27,6 +29,7 @@ export default function SignInPage() {
 
   const handlegoogleclick = async () => {
     try {
+      await signInWithPopup(auth,provider)
       await signIn("google", { redirect: true ,callbackUrl:'/' });
     } catch (error) {
       console.error("Google SignIn Error", error);

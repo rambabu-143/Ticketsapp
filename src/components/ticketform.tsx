@@ -50,7 +50,7 @@ const Ticketform = ({ ticket }: Props) => {
           description: values.description,
           status: values.status,
           priority: values.priority,
-          assignedToUserId: '0' || null,
+          assignedToUserId: '0' ,
           createdAt: new Date(),
           updatedAt: new Date(),
         });
