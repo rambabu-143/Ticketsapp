@@ -9,14 +9,7 @@ import { db } from "@/app/firebase/firebase.config";
 import { collection, doc, getDoc, getDocs, limit, orderBy, query, startAfter, where } from "firebase/firestore";
 
 
-interface GetTicketPageTicketsParams {
-  status?: Status;
-  pageNumber: number;
-  pageSize: number;
-  search: string;
-  description: string;
-  dateFilter: string;
-}
+
 
 interface GetTicketPageParams {
   status?: statusFire;
@@ -31,28 +24,53 @@ interface GetTicketPageParams {
 
 
 export const getHomeTicket = async () => {
-  const tickets = await prisma.ticket.findMany({
-    where: {
-      NOT: { status: Status.CLOSE },
-    },
-    orderBy: {
-      updatedAt: "desc",
-    },
-    take: 5,
-    include: {
-      assignedToUser: true,
-    },
-  });
-  return tickets;
+  try {
+    const ticketsRef = collection(db, "tickets");
+    const q = query(
+      ticketsRef,
+      where("status", "!=", statusFire.CLOSE),
+      orderBy("updatedAt", "desc"),
+      limit(5)
+    );
+
+    const querySnapshot = await getDocs(q);
+    const tickets = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    return tickets;
+  } catch (error) {
+    console.error("Error fetching tickets:", error);
+    throw new Error("Error fetching tickets");
+  }
 };
 export const getGroupticket = async () => {
-  const groupTicket = await prisma.ticket.groupBy({
-    by: ["status"],
-    _count: {
-      id: true,
-    },
-  });
-  return groupTicket;
+  try {
+    const ticketsRef = collection(db, "tickets"); 
+    const querySnapshot = await getDocs(ticketsRef); 
+    const tickets = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    // Grouping the tickets by 'status' and counting the occurrences of each status
+    const groupTicket = tickets.reduce((acc: any, ticket: any) => {
+      const status = ticket.status;
+      if (!acc[status]) {
+        acc[status] = { status, _count: { id: 0 } };
+      }
+      acc[status]._count.id += 1;
+      return acc;
+    }, {});
+
+    // Converting the grouped object to an array
+    const groupedTicketsArray = Object.values(groupTicket);
+
+    return groupedTicketsArray;
+  } catch (error) {
+    console.error("Error fetching and grouping tickets:", error);
+    throw new Error("Error fetching and grouping tickets");
+  }
 };
 
 // Fetch tickets for a specific page with optional status, search, and pagination

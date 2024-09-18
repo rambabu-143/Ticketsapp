@@ -16,17 +16,14 @@ interface Dataprops {
   tickets: TicketFire[];
 }
 
-
-
 export const formatTimestamp = (timestamp: Timestamp): string => {
   if (timestamp) {
     return new Date(timestamp.toDate()).toLocaleString();
   }
   return 'No Date';
 };
+
 const Datatable = ({ tickets }: Dataprops) => {
-
-
   return (
     <div className="w-full mt-5">
       <div className="rounded-lg sm:border">
@@ -34,13 +31,16 @@ const Datatable = ({ tickets }: Dataprops) => {
           <TableHeader>
             <TableRow>
               <TableHead>
-                <div className="flex  justify-center">Title</div>
+                <div className="flex justify-center">Title</div>
               </TableHead>
               <TableHead>
-                <div className="flex  justify-center">Status</div>
+                <div className="flex justify-center">Status</div>
               </TableHead>
               <TableHead>
-                <div className="flex  justify-center">Priority</div>
+                <div className="flex justify-center">Priority</div>
+              </TableHead>
+              <TableHead>
+                <div className="flex justify-center">Assigned To</div> {/* New Assigned To Column */}
               </TableHead>
               <TableHead>Created At</TableHead>
             </TableRow>
@@ -56,10 +56,14 @@ const Datatable = ({ tickets }: Dataprops) => {
                     <Ticketsstatusbatch status={ticket.status as Status} />
                   </div>
                 </TableCell>
-
                 <TableCell>
-                  <div className="flex  justify-center">
+                  <div className="flex justify-center">
                     <Ticketpriority priority={ticket.priority} />
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex justify-center">
+                    {ticket.assignedToUser?.name || "Unassigned"} {/* Display assigned user or Unassigned */}
                   </div>
                 </TableCell>
                 <TableCell>

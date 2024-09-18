@@ -36,7 +36,7 @@ const options: NextAuthOptions = {
             username: "admin",
             password: "admin",
             role: Role.ADMIN,
-          } ;
+          };
         }
 
         try {
@@ -62,22 +62,25 @@ const options: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-    }),
+    }
+
+    ),
   ],
+
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, account, user }) {
       if (account && user) {
         console.log("user:", user);
         token.role = user.role || 'ADMIN';
-        token.id = user.id ;
-        console.log("user LLLLLz")
+        token.id = user.id;
       }
       return token;
     },
     session({ session, token }) {
       if (session.user) {
         session.user.role = token.role || 'ADMIN';
-        session.user.id = token.id ;
+        session.user.id = token.id as number;
         console.log("session:", session, "token:", token);
       }
       return session;

@@ -1,16 +1,15 @@
-import { Prisma } from "@prisma/client";
+
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import Ticketsstatusbatch from "./ticketsstatusbatch";
 import Link from "next/link";
 import Ticketpriority from "./ticketpriority";
+import { Status, TicketFire } from "@/firebase-types/types";
 
-type TicketWithUser = Prisma.TicketGetPayload<{
-  include: { assignedToUser: true };
-}>;
+
 
 interface Props {
-  tickets: TicketWithUser[];
+  tickets: TicketFire[];
 }
 
 const DashRecentTickets = ({ tickets }: Props) => {
@@ -23,7 +22,7 @@ const DashRecentTickets = ({ tickets }: Props) => {
         <div className="space-y-8">
           {tickets.map((ticket) => (
             <div className="flex items-center" key={ticket.id}>
-              <Ticketsstatusbatch status={ticket.status} />
+              <Ticketsstatusbatch status={ticket.status as Status} />
               <div className="ml-4 space-y-1">
                 <Link href={`tickets/${ticket.id}`}>
                   <p className="font-medium">{ticket.title}</p>

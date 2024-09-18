@@ -12,8 +12,9 @@ export enum Priority {
     HIGH = 'HIGH',
 }
 export enum Role {
-    USER = 'USER',
     ADMIN = 'ADMIN',
+    TECH = "TECH",
+    USER = 'USER',
 }
 
 
@@ -21,14 +22,14 @@ export enum Role {
 export interface UserFire {
     id: string;
     name: string;
-    username: string;
-    password: string;
+    username?: string;
+    password?: string;
     role: Role;
-    assignedTickets: TicketFire[];  
+    assignedTickets?: TicketFire[];
 }
 
 export interface TicketFire {
-    id: string ;
+    id: string;
     title: string;
     description: string;
     status: Status;
