@@ -1,11 +1,10 @@
 import Link from "next/link";
 import React from "react";
 import Tooglemode from "./tooglemode";
-import { getServerSession } from "next-auth";
-import options from "@/app/api/auth/[...nextauth]/options";
+import { auth } from "../../auth";
 
 const Mainnav = async () => {
-  const session = await getServerSession(options);
+  const session = await auth();
 
   const isAdmin = session?.user?.role === "ADMIN";
 
@@ -21,7 +20,7 @@ const Mainnav = async () => {
         {session ? (
           <Link href="/signout">Logout</Link>
         ) : (
-          <Link href="/api/auth/signin">Login</Link>
+          <Link href="/signin">Login</Link>
         )}
 
         <Tooglemode />

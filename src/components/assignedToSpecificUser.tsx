@@ -10,8 +10,8 @@ const AssignedToSpecificUser = async () => {
       {tickets.length > 0 ? (
         <div className="flex  justify-center items-center gap-6">
           {tickets.map((ticket) => (
-            <div key={ticket.id} className="flex justify-center items-center gap-3">
-              <h3 className="text-blue-900">{ticket.title} :</h3>
+            <div key={ticket.id} className="flex justify-center text-center items-center gap-3">
+              <h3 className="text-blue-900  font-semibold capitalize">{ticket.title} :</h3>
               <p>{ticket.description}</p>
             </div>
           ))}

@@ -3,10 +3,10 @@ import { Status as statusFire } from "@/firebase-types/types";
 import prisma from "../../prisma/db";
 import { TicketPageProps } from "@/app/tickets/[id]/page";
 import dayjs from "dayjs";
-import { getServerSession } from "next-auth";
-import options from "@/app/api/auth/[...nextauth]/options";
+// import options from "@/app/api/auth/[...nextauth]/auth-options";
 import { db } from "@/app/firebase/firebase.config";
 import { collection, doc, getDoc, getDocs, limit, orderBy, query, startAfter, where } from "firebase/firestore";
+import { auth } from "../../auth";
 
 
 
@@ -46,8 +46,8 @@ export const getHomeTicket = async () => {
 };
 export const getGroupticket = async () => {
   try {
-    const ticketsRef = collection(db, "tickets"); 
-    const querySnapshot = await getDocs(ticketsRef); 
+    const ticketsRef = collection(db, "tickets");
+    const querySnapshot = await getDocs(ticketsRef);
     const tickets = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
@@ -145,13 +145,15 @@ export const ticketWithId = async ({ params }: TicketPageProps) => {
 };
 
 export const getAssignedTickets = async () => {
-  const session = await getServerSession(options);
+  const session = await auth();
   if (!session?.user?.id) {
     return [];
   }
 
+  // console.log(session)
+
   const ticketRef = collection(db, 'tickets')
-  let q = query(ticketRef, where('assignedToUser', '==', session.user.id))
+  let q = query(ticketRef, where('assignedToUserId', '==', session.user.id))
   const mytickets = await getDocs(q)
   const tickets = mytickets.docs.map((doc) => {
     return {

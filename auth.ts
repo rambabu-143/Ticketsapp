@@ -1,18 +1,26 @@
-import { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { Role } from "@prisma/client";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/app/firebase/firebase.config";
+import Credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import { UserFire } from "@/firebase-types/types";
-
-const options: NextAuthOptions = {
+import { Role } from "@/firebase-types/types";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { db, auth as firebaseAuth } from "@/app/firebase/firebase.config";
+import NextAuth from "next-auth";
+import { FirestoreAdapter } from "@auth/firebase-adapter"
+import { cert } from "firebase-admin/app";
+export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     signIn: "/signin",
     signOut: "/signout",
   },
+
+  adapter: FirestoreAdapter({
+    credential: cert({
+      projectId: process.env.AUTH_FIREBASE_PROJECT_ID,
+      clientEmail: process.env.AUTH_FIREBASE_CLIENT_EMAIL,
+      privateKey: process.env.AUTH_FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+    }),
+  }) as any,
   providers: [
-    CredentialsProvider({
+    Credentials({
       id: "credentials",
       name: "Username and Password",
       credentials: {
@@ -23,33 +31,36 @@ const options: NextAuthOptions = {
         },
         password: { label: "Password", type: "password" },
       },
-      authorize: async (credentials) => {
+      async authorize(credentials) {
         if (!credentials) return null;
 
         if (
-          credentials.email == "admin@gmail.com" &&
-          credentials.password == "admin"
+          credentials.email === "admin@gmail.com" &&
+          credentials.password === "admin"
         ) {
           return {
-            id: 0,
+            id: "0",
             name: "Admin",
-            username: "admin",
-            password: "admin",
+            email: "admin@gmail.com",
             role: Role.ADMIN,
           };
         }
 
         try {
           const userCredential = await signInWithEmailAndPassword(
-            auth,
-            credentials.email,
-            credentials.password
+            firebaseAuth,
+            credentials.email as string,
+            credentials.password as string
           );
 
           const user = userCredential.user;
+
+          // Ensure 'name' field is not null
+          const name = user.displayName || user.email;
+
           return {
             id: user.uid,
-            name: user.displayName,
+            name: name,
             email: user.email,
             role: Role,
           };
@@ -59,33 +70,38 @@ const options: NextAuthOptions = {
         }
       },
     }),
+
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-    }
-
-    ),
+    }),
   ],
 
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.AUTH_SECRET,
+  
+  session: {
+    strategy: "jwt",
+  },
+  
+
+
   callbacks: {
     async jwt({ token, account, user }) {
       if (account && user) {
-        console.log("user:", user);
+        // console.log("user:", user);
         token.role = user.role || 'ADMIN';
         token.id = user.id;
       }
       return token;
     },
-    session({ session, token }) {
+    async session({ session, token }) {
       if (session.user) {
         session.user.role = token.role || 'ADMIN';
         session.user.id = token.id as number;
-        console.log("session:", session, "token:", token);
       }
       return session;
     },
   },
-};
+})
 
-export default options;
+
