@@ -2,14 +2,13 @@
 "use client";
 
 import { useState } from "react";
-import { auth } from "../firebase/firebase.config";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function SignUp() {
+  const [name, setName] = useState(""); // Added name state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [data, setdata] = useState({});
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
@@ -24,9 +23,21 @@ export default function SignUp() {
     }
 
     try {
-      const data = await createUserWithEmailAndPassword(auth, email, password);
-      router.push("/signin");
-      return data;
+      
+      const data = await signIn('signupwithemailandpassword', {
+        redirect: false, 
+        name, 
+        email,
+        password,
+        confirmPassword,
+      });
+
+      if (data?.error) {
+        setError(data.error);
+      } else {
+        router.push("/signin"); 
+        router.refresh()
+      }
     } catch (err) {
       setError("Failed to sign up. Please try again.");
       console.error(err);
@@ -38,6 +49,16 @@ export default function SignUp() {
       <h2 className="text-2xl font-semibold mb-4">Sign Up</h2>
 
       <form onSubmit={handleSignUp}>
+        <div className="mb-4">
+          <label className="block text-sm font-medium">Name</label> 
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full p-2 border rounded"
+            required
+          />
+        </div>
         <div className="mb-4">
           <label className="block text-sm font-medium">Email</label>
           <input
@@ -75,6 +96,15 @@ export default function SignUp() {
           Sign Up
         </button>
       </form>
+
+      <div className="mt-4">
+        <button
+          // onClick={handleGoogleSignIn}
+          className="w-full bg-red-500 text-white p-2 rounded hover:bg-red-600 transition"
+        >
+          Sign Up with Google
+        </button>
+      </div>
       {error && <p className="text-red-500 mb-4">{error}</p>}
       <div className="mt-4 text-center">
         <p>

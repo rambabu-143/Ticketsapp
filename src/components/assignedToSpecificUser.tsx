@@ -1,8 +1,8 @@
-import { getAssignedTickets } from "@/data-access/ticketdata";
+import { TicketServices } from "@/data-access/ticketdata";
 
 
 const AssignedToSpecificUser = async () => {
-  const tickets = await getAssignedTickets()
+  const tickets = await TicketServices.getAssignedTickets()
   return (
     <div>
 

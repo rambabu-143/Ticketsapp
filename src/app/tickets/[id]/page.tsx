@@ -1,6 +1,6 @@
 import {  NextPage } from "next";
 import TicketDisplay from "@/components/TicketDisplay";
-import { ticketWithId } from "@/data-access/ticketdata";
+import { TicketServices } from "@/data-access/ticketdata";
 import { TicketFire, UserFire } from "@/firebase-types/types";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/app/firebase/firebase.config";
@@ -12,7 +12,7 @@ export interface TicketPageProps {
 const TicketPage: NextPage<TicketPageProps> = async ({
   params,
 }: TicketPageProps) => {
-  const ticket = await ticketWithId({ params }) as TicketFire;
+  const ticket = await TicketServices.ticketWithId({ params }) as TicketFire;
   const userRef = collection(db, 'users');
 
   const alluser = await getDocs(userRef);

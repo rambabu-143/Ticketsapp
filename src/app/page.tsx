@@ -1,15 +1,15 @@
 import DashRecentTickets from "@/components/dashrecent-tickets";
 import DashChart from "@/components/dashChart";
-import { getGroupticket, getHomeTicket } from "@/data-access/ticketdata";
+import { TicketServices } from "@/data-access/ticketdata";
 import AssignedToSpecificUser from "@/components/assignedToSpecificUser";
 import { TicketFire } from "@/firebase-types/types";
 
 export default async function Home() {
-  const tickets = await getHomeTicket();
+  const tickets = await TicketServices.getHomeTicket();
 
-  const groupTicket = await getGroupticket();
+  const groupTicket = await TicketServices.getGroupticket();
 
-  const data = groupTicket.map((item :any) => {
+  const data = groupTicket.map((item: any) => {
     return {
       name: item.status,
       total: item._count.id,

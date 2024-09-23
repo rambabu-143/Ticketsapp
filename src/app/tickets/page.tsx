@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import Pagenation from "@/components/Pagenation";
 import StatusFilter from "@/components/statusFilter";
 import { Status as statusFire } from "@/firebase-types/types";
-import { getTicketPageTickets } from "@/data-access/ticketdata";
+import {  TicketServices } from "@/data-access/ticketdata";
 import SearchBar from "@/components/SearchBar";
 import dayjs from "dayjs";
 import DateFilter from "@/components/dateFilter";
@@ -34,7 +34,7 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
     dateFilter = yesterday;
   }
 
-  const { tickets, ticketcount } = await getTicketPageTickets({
+  const { tickets, ticketcount } = await TicketServices.getTicketPageTickets({
     status: searchParams.status,
     search: searchParams.search,
     description: searchParams.description,

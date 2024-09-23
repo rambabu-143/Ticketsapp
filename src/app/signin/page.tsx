@@ -13,7 +13,7 @@ export default function SignInPage() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const result = await signIn("credentials", {
+    const result = await signIn("signinwithemailandpassword", {
       redirect: false,
       email,
       password,
