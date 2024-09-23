@@ -5,7 +5,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth as firebaseAuth } from "@/app/firebase/firebase.config";
 import NextAuth from "next-auth";
 import UserServices from "@/data-access/userdata";
-import { dbAdapter } from "./FirebaseAdapters";
+import { dbAdapter } from "@/data-access/UserServerServices";
 
 
 interface userDataProps {
